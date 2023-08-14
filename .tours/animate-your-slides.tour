@@ -1,0 +1,35 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Animate your slides",
+  "steps": [
+    {
+      "file": "pechakucha.md",
+      "description": "Wrap each of your images with a container that is the `slide` class. A card is a good choice, but you can also write a div in directly.\n\nThe card has the declaration, then the classes, a blank line, your content and colons to close. \nA wrapped image wil look like  this: \n \n```md\n:::{card}\n:class-cards: slide\n\n![a pic of me](_static/img/profile.png)\n:::\n```\n\nRemember you will replace this iwht your actual images. \nIf you want a play/pause button you can continue the tour, otherwise you are done!",
+      "line": 11
+    },
+    {
+      "directory": "_static/",
+      "description": "If you want to add a play/pause button, create a new file called `play_pause.html` in your static folder. The buttons are in a separate file so you can reuse them on multiple pages if you want and to keep your `pechakucha.md` file with minimal code in it to be easier to read.\n\nYou can use the menu or the command below to creat the file. \n>> touch _static/play_pause.html\n"
+    },
+    {
+      "file": "_static/play_pause.html",
+      "description": "Now, add the following code to your new file `_static/play_pause.html`:\n\n```html\n<!-- a container for the buttons -->\n<div class=\"controls\">\n    <!-- the btn,  btn-dark, and btn-info classes come from Bootstrap you can change them or add more-->\n    <input class='btn btn-dark' id=\"pause\" type=\"button\" value=\"X\" onclick=\"clearInterval(slideInterval)\" />\n\n    <input class='btn btn-info' id=\"play\" type=\"button\" value=\"Present\" onclick=\"slideInterval = setInterval(showSlides, slideTime);\" />\n\n    <!-- the functions called by buttons are defined in layout.html -->\n\n</div>\n```\n\nAfter the tour, you can come back to this file and use the comments to customize the look of your buttons. ",
+      "line": 1
+    },
+    {
+      "file": "pechakucha.md",
+      "description": "Now, we link the buttons to the pechakuch page with these two lines: \n\n```md\n:::{include} _static/play_pause.html\n:::\n```\n\nYou can add them at the top or bottom, depending on where you want them to show and you an use css later to move them too!",
+      "line": 3
+    },
+    {
+      "file": "_templates/layout.html",
+      "description": "Replace the contents of your `_templates/layout.html` with the following:\n\n\n```html\n{% extends '!layout.html' %}\n\n{% block footer %}\n<!--  the stuff above here makes your pages work regularly -->\n<!--  the stuff below here puts javascript on all of the pages -->\n\n<script>\n    // this section is javascript, not HTML evn though it's in the HTML file\n    let slideIndex = 0;\n    let slides = document.getElementsByClassName(\"slide\");\n    let slideTime = 5000;\n    // var slideInterval = setInterval(showSlides, slideTime);\n    // clearInterval(slideInterval);\n\n    // if (slides.length > 0 ){\n    //     showSlides();\n    // }\n\n    function showSlides() {\n        let i;\n        let slides = document.getElementsByClassName(\"slide\");\n        // console.log('in')\n        // console.log(slides.length)\n        // console.log(slideIndex)\n\n        let dots = document.getElementsByClassName(\"dot\");\n        for (i = 0; i < slides.length; i++) {\n            // console.log(i)\n            // console.log('off')\n            slides[i].style.display = \"none\";\n        }\n        slideIndex++;\n        if (slideIndex > slides.length) { slideIndex = 1 }\n        slides[slideIndex - 1].style.display = \"block\";\n        // for (i = 0; i < dots.length; i++) {\n        //     dots[i].className = dots[i].className.replace(\" active\", \"\");\n        // }\n        // slides[slideIndex - 1].style.display = \"block\";\n        // slides[slideIndex-1].setAttribute(\"style\",\"display:block\");\n        // dots[slideIndex - 1].className += \" active\";\n        // setTimeout(showSlides, slideTime); // Change image every 2 seconds\n    }\n\n//  make full screen mode\n    function openFullscreen() {\n        var elem = document.getElementById('slideshow');\n        console.log('fullscreen');\n            if (elem.requestFullscreen) {\n                elem.requestFullscreen();\n            } else if (elem.mozRequestFullScreen) { /* Firefox */\n                elem.mozRequestFullScreen();\n            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */\n                elem.webkitRequestFullscreen();\n            } else if (elem.msRequestFullscreen) { /* IE/Edge */\n                elem.msRequestFullscreen();\n            }\n        showSlides()\n        slideInterval = setInterval(showSlides, slideTime);\n    }\n\n\n    function closeFullscreen() {\n            if (document.exitFullscreen) {\n                document.exitFullscreen();\n            } else if (document.mozCancelFullScreen) { /* Firefox */\n                document.mozCancelFullScreen();\n            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */\n                document.webkitExitFullscreen();\n            } else if (document.msExitFullscreen) { /* IE/Edge */\n                document.msExitFullscreen();\n            }\n\n        clearInterval(slideInterval);\n        }\n</script>\n{% endblock %}\n```",
+      "line": 1
+    },
+    {
+      "file": "_templates/layout.html",
+      "description": "`let slideTime = 5000;` sets the duration of the slides, after you are done testing you will change it to `20000` instead of `5000` to have 20 seconds (20000 milliseconds)",
+      "line": 11
+    }
+  ]
+}

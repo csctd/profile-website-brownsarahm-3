@@ -1,0 +1,123 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Animate in a carousel",
+  "steps": [
+    {
+      "file": "pechakucha.md",
+      "title": "Wrap your images with a card class",
+      "description": "Wrap each of your images with a container that is the `slide` class. A card is a good choice, but you can also write a div in directly.\n\nThe card has the declaration, then the classes, a blank line, your content and colons to close. \n\n````md\n\n```{card}\n:class-cards: slide\n\n![alt text](path/to/img)\n```\n````\n\n**warning code tour does not render that block well, but will insert the right thing**\n\nRemember that this example is not an actual imge or alternate text, and you should replace it with your actual images (where the path is probably `_stat/img/` and then the file name).",
+      "line": 23
+    },
+    {
+      "directory": "_static/",
+      "title": "create a button file",
+      "description": "Create a new file caled `buttons.html` in your static folder. The buttons are in a separate file so you can reuse them on multiple pages if you want and to keep your `pechakucha.md` file with minimal code in it to be easier to read.\n\nYou can use the menu or the command below to creat the file. \n>> touch _static/buttons.html\n"
+    },
+    {
+      "file": "_static/buttons.html",
+      "title": "add button code",
+      "description": "Now, add the following code to your new file `_static/buttons.html`:\n\n```\n<!-- a container for the buttons -->\n<div class=\"controls\">\n    <!-- the btn,  btn-dark, and btn-info classes come from Bootstrap-->\n<input class='btn btn-dark' id=\"pageview\" type=\"button\" value=\"X\" onclick=\"closeFullscreen()\"/>\n\n<input class='btn btn-info' id=\"presentation\" type=\"button\" value=\"Present\" onclick=\"openFullscreen()\"/>\n\n<!-- the functions called by buttons are defined in layout.html -->\n\n</div>\n```\n\nAfter the tour, you can come back to this file and use the comments to customize the look of your buttons. ",
+      "line": 1
+    },
+    {
+      "file": "_static/buttons.html",
+      "title": "(optional) customize the close button",
+      "description": "If you want to change how the buttons look you can add or swap the class and change the display text in the `value` attribute. \n\nWe will add functional css to the `pageview` id soon, so do not alter this. ",
+      "line": 4
+    },
+    {
+      "file": "_static/buttons.html",
+      "title": "(optional) customize the present button",
+      "description": "like the close button, you can change the class and value, but not the id",
+      "line": 6
+    },
+    {
+      "file": "_templates/layout.html",
+      "title": "Update the javascript",
+      "description": "Replace the contents of your `_templates/layout.html` with the following:\n\n\n~~~\n{% extends '!layout.html' %}\n\n{% block footer %}\n<!--  the stuff above here makes your pages work regularly -->\n<!--  the stuff below here puts javascript on all of the pages -->\n\n<script>\n    // this section is javascript, not HTML evn though it's in the HTML file\n    let slideIndex = 0;\n    let slides = document.getElementsByClassName(\"slide\");\n    let slideTime = 5000;\n    // var slideInterval = setInterval(showSlides, slideTime);\n    // clearInterval(slideInterval);\n\n    // if (slides.length > 0 ){\n    //     showSlides();\n    // }\n\n    function showSlides() {\n        let i;\n        let slides = document.getElementsByClassName(\"slide\");\n        // console.log('in')\n        // console.log(slides.length)\n        // console.log(slideIndex)\n\n        let dots = document.getElementsByClassName(\"dot\");\n        for (i = 0; i < slides.length; i++) {\n            // console.log(i)\n            // console.log('off')\n            slides[i].style.display = \"none\";\n        }\n        slideIndex++;\n        if (slideIndex > slides.length) { slideIndex = 1 }\n        slides[slideIndex - 1].style.display = \"block\";\n        // for (i = 0; i < dots.length; i++) {\n        //     dots[i].className = dots[i].className.replace(\" active\", \"\");\n        // }\n        // slides[slideIndex - 1].style.display = \"block\";\n        // slides[slideIndex-1].setAttribute(\"style\",\"display:block\");\n        // dots[slideIndex - 1].className += \" active\";\n        // setTimeout(showSlides, slideTime); // Change image every 2 seconds\n    }\n\n//  make full screen mode\n    function openFullscreen() {\n        var elem = document.getElementById('slideshow');\n        console.log('fullscreen');\n            if (elem.requestFullscreen) {\n                elem.requestFullscreen();\n            } else if (elem.mozRequestFullScreen) { /* Firefox */\n                elem.mozRequestFullScreen();\n            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */\n                elem.webkitRequestFullscreen();\n            } else if (elem.msRequestFullscreen) { /* IE/Edge */\n                elem.msRequestFullscreen();\n            }\n        showSlides()\n        slideInterval = setInterval(showSlides, slideTime);\n    }\n\n\n    function closeFullscreen() {\n            if (document.exitFullscreen) {\n                document.exitFullscreen();\n            } else if (document.mozCancelFullScreen) { /* Firefox */\n                document.mozCancelFullScreen();\n            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */\n                document.webkitExitFullscreen();\n            } else if (document.msExitFullscreen) { /* IE/Edge */\n                document.msExitFullscreen();\n            }\n\n        clearInterval(slideInterval);\n        }\n</script>\n{% endblock %}\n~~~",
+      "line": 1
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "Add the buttons to the page",
+      "description": "Now, we add the buttons to the pechakucha page with these two lines: \n\n`````\n:::{include} _static/buttons.html\n:::\n`````\n\nYou can add them at the top or bottom, depending on where you want them to show and you an use css later to move them too!",
+      "line": 3
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "Make a slideshow block to prepare for fulscreen",
+      "description": "add a wrapper dive with `id='slideshow'` to contain your presentation and controls so that we can maximize this part of the site. \n\n```\n<div id=\"slideshow\">\n```. \n\nMake sure your buttons are after the div so they are still included when in presentation view. ",
+      "line": 2
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "close the block",
+      "description": "close that div at the bottom of the page with \n\n```md\n<div>\n```",
+      "pattern": "$(?![\r\n])"
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "Add the carousel",
+      "description": "Start the carousel with \n\n```md\n````{card-carousel} 2\n```\n\nthe number is how many cards are visible at a time. ",
+      "pattern": "<div id=slideshow>"
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "Close the carousel",
+      "description": "End the carousel with for matching backticks after all of your slides, inside your `#slideshow` div. \n\n~~~md\n````\n~~~\n\n",
+      "pattern": "</div>"
+    },
+    {
+      "file": "_static/custom.css",
+      "title": "Toggle buttons with view",
+      "description": "This toggles the site/ presentation buttons that control the view to only show in the view where it makes sense to make use them. \n\nIt selects using two things, first the `slideshow` id selector with the [`fullscreen` psuedo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/:fullscreen) then the id selector for the button.  \n\nIt also uses, for each button, the `:not(:fullscreen)` for what to do when not in fullscreen mode.\n\n```css\n\n/* site view only on in fullscreen */\n#slideshow:not(:fullscreen) #pageview{\n    display:none;\n}\n\n#slideshow:fullscreen #pageview{\n    display:block;\n}\n\n/* presentation button off in fullscreen */\n#slideshow:fullscreen #presentation{\n    display: none;\n}\n\n#slideshow:not(:fullscreen) #presentation{\n    display: block;\n}\n\n```",
+      "line": 193
+    },
+    {
+      "file": "_static/custom.css",
+      "title": "Move the controls in presentation view",
+      "description": "this toggles the background aroudn the slides between full screen and not. You can also set other style for the two modes in this CSS.\n```css\n/* put controls in the bottm right of the screen and \n       on top of the slides in fullscreen */\n#slideshow:fullscreen div.controls {\n   position:absolute;\n   bottom:0px;\n   right: 0px;\n   z-index: 100; \n}\n```\n\nThe controls need to be \"on top\" of the slides so that they are clickable. ",
+      "line": 202
+    },
+    {
+      "file": "_static/custom.css",
+      "title": "Style the Presentation view",
+      "description": "this toggles the background aroudn the slides between full screen and not. You can also set other style for the two modes in this CSS.\n```css\n/* background in full screen */\n#slideshow::backdrop {\n    background-color: darkblue;\n}\n/*  maximize carousel so that cards can be maxed*/\n#slideshow:fullscreen div.sd-cards-carousel {\n    height: 100%;\n    overflow: hidden;\n}\n/*  maximize the cards */\n#slideshow:fullscreen div.sd-card {\n    height: 100%;\n    width: 100%;\n    /* text-align: center;\n    vertical-align: middle; */\n    display: inline;\n}\n/* defaults back */\n#slideshow:not(:fullscreen) div.sd-card {\n    height: inherit;\n}\n/* center the images in fullscreen */\n#slideshow:fullscreen div.sd-card img{\n    position: absolute;\n    left: 50%;\n    top: 50%;\n    transform: translateX(-50%) translateY(-50%);\n}\n```\n\nYou can change however you like, following the comments to understand the separate pieces. \n\n",
+      "line": 209
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "Caption your slides",
+      "description": "Optionally, you can add a footer to your cards, for example to add a caption, to do so: \n\nAdd:\n```\n+++\na caption here\n```\n\ninside of your card (before the closing 3 backticks). The `+++` line separates the card body from the footer. ",
+      "pattern": "\n```\n"
+    },
+    {
+      "file": "_static/custom.css",
+      "title": "Hide footers in presentation mode",
+      "description": "If you use captions, you probably want to hide the footer text in full screen mode. This keeps your presentation view clean. \n\n```css\n/* hide card footer fullscreen */\n#slideshow:fullscreen div.sd-card-footer{\n    display: none;\n}\n\n/* show card footer otherwise */\n#slideshow:not(:fullscreen) div.sd-card-footer {\n    display: inherit;\n}\n```\n\n\nThis makes it so that the card footer is hidden in full screen. It uses the `slideshow` id selector with the `:fullscreen` decorator and controls only divs with the `sd-card-footer` class.  I figured this out by inspecting the rendered site after I had added a footer. ",
+      "line": 206
+    },
+    {
+      "file": "pechakucha.md",
+      "title": "Style your slides",
+      "description": "optionally, you can add additional classes that you write yourself to customize the look of your slides. Use commas between classes",
+      "pattern": ":class-cards:"
+    },
+    {
+      "file": "_static/custom.css",
+      "title": "Define your style",
+      "description": "this is an example of changing styling a card using a class named `pink`\n\n```css\n/*  define the pink  cards*/\ndiv.sd-card.pink {\n    border-color: hotpink;\n    border-width: 5px;\n    box-shadow:  pink;\n}\ndiv.sd-card.pink div.sd-card-header {\n    background-color:  pink;\n}\n\n/*  define the pink slides*/\ndiv.sd-card.pink div.sd-card-footer{\n    border-color: hotpink;\n    background-color: lightpink;\n    color:darkmagenta;\n}\n```",
+      "line": 193
+    },
+    {
+      "file": "_static/custom.css",
+      "description": "this controls how faded out your slide gets. the `fade` is an animation name that we set for the `slide` class elsewhere. Below here are two other examples. ",
+      "pattern": "@keyframes fade"
+    },
+    {
+      "file": "_static/custom.css",
+      "description": "this sets that the slides (which is what the javascript changes between visible and not) how the appear on the page. \n\nthe animation name selects an animation definitino that is indluded as a `@keyframe` in this file. the duration is how long it takes to complete the animation. ",
+      "pattern": "animation-name:"
+    }
+  ]
+}
