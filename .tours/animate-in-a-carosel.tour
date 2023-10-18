@@ -41,7 +41,7 @@
       "file": "pechakucha.md",
       "title": "Add the buttons to the page",
       "description": "Now, we add the buttons to the pechakucha page with these two lines: \n\n`````\n:::{include} _static/buttons.html\n:::\n`````\n\nYou can add them at the top or bottom, depending on where you want them to show and you an use css later to move them too!",
-      "line": 3
+      "line": 4
     },
     {
       "file": "pechakucha.md",
